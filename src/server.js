@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { MongoClient } from 'mongodb';
+import path from 'path';
+
 // const articleInfo = {
 //   'learn-react': {
 //     upvotes: 0,
@@ -18,6 +20,7 @@ import { MongoClient } from 'mongodb';
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, '/build')));
 // Parse json
 app.use(bodyParser.json());
 
@@ -143,6 +146,10 @@ app.post('/api/articles/:name/add-comment', async (req, res) => {
 
   // return status code
   // res.status(200).send(articleInfo[articleName]);
-})
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/build/index.html'))
+});
 
 app.listen(8000, () => console.log('Listing on port 8000'));
